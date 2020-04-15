@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <title>社区</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <script src="js/jquery.min.js"></script>
+    <script  src="js/bootstrap.min.js" type="application/javascript" ></script>
+    <link rel="stylesheet" href="css/community.css">
+
+</head>
+<body>
+
+<div th:insert="~{navigation :: nav}"></div>
+<div class="container-fluid">
+    <div class="row main panel panel-default">
+        <div class="col-lg-9 publish text-border mycontent-left" style="background-color: white;border-right: #999999">
+            <h2 class="glyphicon glyphicon-list top">发现</h2>
+            <hr style="filter: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color="#6f5499" size="3" />
+
+            <!--列表-->
+            <div class="media" th:each="question : ${pagDTO.getQuestionDTO()}">
+                <div class="media-left ">
+                    <a href="#" >
+                        <img class="img-rounded" th:src="${question.getUser().getAvatarUrl()}" th:width="64px" th:height="64px" >
+                    </a>
+                </div>
+                <div class="media-body">
+                    <a th:href="'/myquestion/'+${question.getId()}">
+                        <h4 class="media-heading" th:text="${question.getTitle()}"></h4>
+                    </a>
+                    <span th:text="${question.getDescription()}"></span><br>
+                    <span style="color: #999999;font-size: 12px;font-weight: normal;"><span th:text="${question.getCommentCount()}"></span> 个回复• <span th:text="${question.viewCount}"></span> 次浏览• <span th:text="${#dates.format(question.getGmtCreate(),'yyyy-MM-dd HH:mm')}"></span> </span>
+                </div>
+                <hr style="filter: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color="#6f5499" size="3" />
+            </div>
+
+            <!--分页下标-->
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <li th:if="${pagDTO.showFirstPage}">
+                        <a th:href="@{/(page=${1})}" aria-label="Previous">
+                            <span aria-hidden="true">&lt&lt</span>
+                        </a>
+                    </li>
+                    <li th:if="${pagDTO.showPrevious}">
+                        <a th:href="@{/(page=${pagDTO.page - 1})}" aria-label="Previous">
+                            <span aria-hidden="true">&lt</span>
+                        </a>
+                    </li>
+                    <li th:each="page:${pagDTO.pages}" th:class="${pagDTO.getPage() == page}? 'active' : ''">
+                        <a th:href="@{/(page=${page})}" th:text="${page}"></a>
+                    </li>
+                    <li th:if="${pagDTO.showNext}">
+                        <a th:href="@{/(page=${pagDTO.page + 1})}" aria-label="Previous">
+                            <span aria-hidden="true">&gt</span>
+                        </a>
+                    </li>
+                    <li th:if="${pagDTO.showEndPage}">
+                        <a th:href="@{/(page=${pagDTO.titlePage})}" aria-label="Previous">
+                            <span aria-hidden="true">&gt&gt</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="col-lg-3" style="background-color: white">
+            <h5 class ="text-center">热门话题</h5>
+        </div>
+    </div>
+</div>
+</body>
+</html>

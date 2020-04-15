@@ -1,0 +1,42 @@
+.main{
+    margin: 30px;
+    background-color: white;
+}
+.publish{
+    padding-bottom: 5px;
+}
+.text-border{
+    border:1px solid #9d9d9d;
+    cellpadding:"0";
+    cellspacing:"0";
+    border-left-style:solid;
+    border-bottom-style:none;
+    border-right-style:none;
+    border-top-style:none;
+}
+.login-form {
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+    min-height: 300px;
+    height: auto;
+}
+.mycontent-left {
+    border-right: 1px dashed #333;
+}
+.row-centered {
+    padding-top: 10%;
+}
+.login-big{
+    height: 50%;
+}
+.text-esc{
+    font-size: 12px;
+    font-weight: normal;
+    color: #999999;
+}
+

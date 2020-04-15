@@ -1,0 +1,22 @@
+server:
+  port: 8887
+spring:
+  mvc:
+    async:
+      request-timeout: 500000
+  datasource:
+    url: jdbc:h2:/Users/chenzihao/IdeaProjects/community/communitysql
+    username: root
+    password: root
+    driver-class-name: org.h2.Driver
+
+github.client.id: Iv1.a04352b825051355
+github.client.secret: dff03ff9c237119c4acc4815547dcf6a8d6d4deb
+github.redirect.uri: http://localhost:8887/callbackgithub
+
+gitee.client.id: ac31ebf60c26ff18c6db18c64b654849fcffc760635a53692da846d8ab02d899
+gitee.client.secret: e51b4e0e09190272f874add14499fb56a105c7f4445685c68810625351f2c45d
+gitee.redirect.uri: http://localhost:8887/callbackgitee
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
