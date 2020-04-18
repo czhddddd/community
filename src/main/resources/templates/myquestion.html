@@ -23,6 +23,7 @@
 
             <div >
                 <a th:href="'/publish/'+${myquestion.getId()}" type="button" class="btn btn-default" th:if="${session.user != null && session.user.id == myquestion.creatorId}">
+
                     <span class="glyphicon glyphicon-pencil" aria-hidden="true" style="color: #999999">编辑</span>
                 </a>
 

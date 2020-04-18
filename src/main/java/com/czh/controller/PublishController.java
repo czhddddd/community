@@ -41,7 +41,7 @@ public class PublishController {
                             @RequestParam(value = "tag",required = false) String tag,
                             HttpServletRequest request,
                             Model model,
-                            @RequestParam(value = "id",required = false) Integer id){
+                            @RequestParam(value = "id",required = false) Long id){
         //用于回显数据
         model.addAttribute("title",title);
         model.addAttribute("description",description);
@@ -100,7 +100,7 @@ public class PublishController {
     }
 
     @GetMapping("/publish/{id}")
-    public String edit(@PathVariable("id")Integer id,Model model){
+    public String edit(@PathVariable("id") Long id, Model model){
         //编辑
         Question byId = questionMapper.findById(id);
         //回显数据

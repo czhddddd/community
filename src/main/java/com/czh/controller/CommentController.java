@@ -1,8 +1,13 @@
 package com.czh.controller;
 
 import com.czh.dto.CommentDto;
+import com.czh.dto.ResultDTO;
+import com.czh.exception.CustomizeErrorCode;
+import com.czh.exception.CustomizeException;
 import com.czh.mapper.CommentMapper;
 import com.czh.modle.Comment;
+import com.czh.modle.User;
+import com.czh.service.CommentService;
 import org.omg.CORBA.OBJ_ADAPTER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,19 +30,26 @@ public class CommentController {
     @Autowired
     private CommentMapper commentMapper;
 
+    @Autowired
+    private CommentService commentService;
+
     @ResponseBody
     @RequestMapping(value = "/comment",method = RequestMethod.POST)
-    public Object post(@RequestBody CommentDto commentDto){
+    public Object post(@RequestBody CommentDto commentDto,
+                       HttpServletRequest request){
+        User user = (User) request.getSession().getAttribute("user");
+        if (user == null){
+            return ResultDTO.errorOf(CustomizeErrorCode.NO_LOGIN);
+        }
         Comment comment = new Comment();
         comment.setParentId(commentDto.getParentId());
+        comment.setCommentator(user.getId());
         comment.setComment(commentDto.getComment());
-        comment.setCommentator(1);
+        comment.setType(commentDto.getType());
         comment.setGmtCreate(System.currentTimeMillis());
         comment.setGmtModified(comment.getGmtCreate());
-        comment.setType(commentDto.getType());
-        commentMapper.insert(comment);
-        Map<Object,Object> ha = new HashMap<>();
-        ha.put("message","ok");
-        return ha;
+        comment.setLikeCount(0L);
+        commentService.insert(comment);
+        return ResultDTO.okOf();
     }
 }

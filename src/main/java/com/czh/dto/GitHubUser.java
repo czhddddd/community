@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class GitHubUser {
     private String name;
-    private long id;
+    private Long id;
     private String bio;
 }

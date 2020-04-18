@@ -20,17 +20,20 @@ public interface QuestionMapper {
     Integer titlecount();
 
     @Select("select * from question where creator_id = #{id} limit #{offset},#{size}")
-    List<Question> findByCreateId(@Param("id") Integer id,@Param("offset") Integer offset, @Param("size") Integer size);
+    List<Question> findByCreateId(@Param("id") Long id,@Param("offset") Integer offset, @Param("size") Integer size);
 
     @Select("select count(1) from question where creator_id = #{id}")
-    Integer questioncount(@Param("id") Integer id);
+    Integer questioncount(@Param("id") Long id);
 
     @Select("select * from question where id = #{id}")
-    Question findById(@Param("id") Integer id);
+    Question findById(@Param("id") Long id);
 
     @Update("update question set title=#{title},description=#{description},tag=#{tag} where id=#{id}")
     void updateById(Question question);
 
     @Update("update question set view_count = view_count + 1 where id = #{id}")
-    void updateByIdIncView(Integer id);
+    void updateByIdIncView(@Param("id") Long id);
+
+    @Update("update question set comment_count = comment_count + 1 where id = #{id}")
+    void updateByIdIncComment(@Param("id") Long id);
 }

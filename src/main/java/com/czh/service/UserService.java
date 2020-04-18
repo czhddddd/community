@@ -16,14 +16,17 @@ public class UserService {
     private UserMapper userMapper;
 
     public User creatOrUpdate(User user){
-        User byAccountId = userMapper.findByAccountId(user.getAccountId());
-        //根据accountid检验重复用户
-        if (byAccountId.getAccountId().equals(user.getAccountId())){
-            userMapper.updateUser(user);
-        }else {
-            user.setGmtCreate(System.currentTimeMillis());
-            user.setGmtModified(user.getGmtCreate());
-            userMapper.insert(user);
+        try{
+            User byAccountId = userMapper.findByAccountId(user.getAccountId());
+            if (byAccountId == null){
+                user.setGmtCreate(System.currentTimeMillis());
+                user.setGmtModified(user.getGmtCreate());
+                userMapper.insert(user);
+            }else {
+                userMapper.updateUser(user);
+            }
+
+        }catch (Exception e){
         }
         return user;
     }

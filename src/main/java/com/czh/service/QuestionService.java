@@ -6,7 +6,6 @@ import com.czh.mapper.QuestionMapper;
 import com.czh.mapper.UserMapper;
 import com.czh.modle.Question;
 import com.czh.modle.User;
-import com.fasterxml.jackson.databind.util.BeanUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -105,7 +104,7 @@ public class QuestionService {
         return pageDTO;
     }
 
-    public QuestionDTO findById(Integer id) {
+    public QuestionDTO findById(Long id) {
         Question byId = questionMapper.findById(id);
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(byId,questionDTO);
@@ -115,7 +114,7 @@ public class QuestionService {
     }
 
     public void insertOrUpdate(Question question) {
-        Integer id = question.getId();
+        Long id = question.getId();
         if (id == null){
             //插入
             question.setGmtCreate(System.currentTimeMillis());
@@ -128,7 +127,7 @@ public class QuestionService {
         }
 
 
-    public void incView(Integer id) {
+    public void incView(Long id) {
         questionMapper.updateByIdIncView(id);
     }
 }
