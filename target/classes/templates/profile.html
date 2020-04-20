@@ -30,7 +30,13 @@
                     <h4 class="media-heading" th:text="${question.getTitle()}"></h4>
                     <span th:text="${question.getDescription()}"></span><br>
                     <span style="color: #999999;font-size: 12px;font-weight: normal;"><span th:text="${question.getCommentCount()}"></span> 个回复• <span th:text="${question.viewCount}"></span> 次浏览• <span th:text="${#dates.format(question.getGmtCreate(),'yyyy-MM-dd HH:mm')}"></span> </span>
+                    <div style="float: right;margin-top: -28px">
+                        <a th:href="'/publish/'+${question.getId()}" type="button" class="btn btn-default" th:if="${session.user != null && session.user.id == question.creatorId}">
+                            <span class="glyphicon glyphicon-pencil" aria-hidden="true" style="color: #999999">编辑</span>
+                        </a>
+                    </div>
                 </div>
+
                 <hr style="filter: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color="#6f5499" size="3" />
             </div>
 

@@ -1,10 +1,12 @@
 package com.czh.controller;
 
+import com.czh.cache.TagCache;
 import com.czh.mapper.QuestionMapper;
 import com.czh.mapper.UserMapper;
 import com.czh.modle.Question;
 import com.czh.modle.User;
 import com.czh.service.QuestionService;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,7 +33,8 @@ public class PublishController {
 
     //如果是get方法那就渲染页面，如果是post方法那就执行请求
     @GetMapping("/publish")
-    public String publish(){
+    public String publish(Model model){
+        model.addAttribute("selectTags", TagCache.get());
         return "publish";
     }
 
@@ -46,6 +49,9 @@ public class PublishController {
         model.addAttribute("title",title);
         model.addAttribute("description",description);
         model.addAttribute("tag",tag);
+
+        model.addAttribute("selectTags", TagCache.get());
+
 
         if (title == null || title == ""){
             model.addAttribute("error","标题不能为空");
@@ -108,6 +114,8 @@ public class PublishController {
         model.addAttribute("description",byId.getDescription());
         model.addAttribute("tag",byId.getTag());
         model.addAttribute("id",id);
+
+        model.addAttribute("selectTags", TagCache.get());
         return "publish";
     }
 
