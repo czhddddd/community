@@ -1,9 +1,13 @@
 package com.czh.service;
 
+import com.czh.dto.CommentPageDTO;
+import com.czh.dto.CommentResultDTO;
 import com.czh.dto.PageDTO;
 import com.czh.dto.QuestionDTO;
+import com.czh.mapper.CommentMapper;
 import com.czh.mapper.QuestionMapper;
 import com.czh.mapper.UserMapper;
+import com.czh.modle.Comment;
 import com.czh.modle.Question;
 import com.czh.modle.User;
 import org.springframework.beans.BeanUtils;
@@ -23,6 +27,10 @@ public class QuestionService {
     @Autowired
     private QuestionMapper questionMapper;
 
+    @Autowired
+    private CommentMapper commentMapper;
+
+    //首页列表
     public PageDTO list(Integer page, Integer size){
         //获取列表总数
         Integer titlecount = questionMapper.titlecount();
@@ -65,7 +73,7 @@ public class QuestionService {
         return pageDTO;
     }
 
-    //重新计算我的问题的分页
+    //我的问题的列表
     public PageDTO profileQuestionList(User user, Integer page, Integer size) {
 
         //账号下所有问题的数量
@@ -103,7 +111,7 @@ public class QuestionService {
 
         return pageDTO;
     }
-
+    //根据id查找
     public QuestionDTO findById(Long id) {
         Question byId = questionMapper.findById(id);
         QuestionDTO questionDTO = new QuestionDTO();
@@ -112,7 +120,7 @@ public class QuestionService {
         questionDTO.setUser(userbyId);
         return questionDTO;
     }
-
+    //插入或更新question
     public void insertOrUpdate(Question question) {
         Long id = question.getId();
         if (id == null){
@@ -124,10 +132,96 @@ public class QuestionService {
             //更新
             questionMapper.updateById(question);
             }
-        }
-
-
+    }
+    //浏览次数
     public void incView(Long id) {
+
         questionMapper.updateByIdIncView(id);
     }
+
+
+    //问题评论列表
+    public CommentPageDTO selectByIdList(Long id, Integer page, Integer size) {
+        Integer commentCount = commentMapper.commentCount(id);
+        //计算分页数
+        Integer commentPage;
+        if (commentCount % size == 0){
+            commentPage = commentCount / size;
+        }else {
+            commentPage = (commentCount / size) + 1;
+        }
+        //容错处理
+        if (page < 1){
+            page = 1;
+        }
+        if (page > commentPage){
+            page = commentPage;
+        }
+
+        //通过将数据查询出来
+        Integer offset = size * (page - 1);
+        List<Comment> list = commentMapper.list(id,offset,size);
+        List<CommentResultDTO>  commentResultDTOS = new ArrayList<>();
+        CommentPageDTO commentPageDTO = new CommentPageDTO();
+        //遍历list
+        for (Comment comment : list) {
+            //通过question.creatuid获得user对象
+            User userbyId = userMapper.findById(comment.getCommentator());
+            //将question对象拷贝进questiondto中
+            CommentResultDTO commentResultDTO = new CommentResultDTO();
+            //BeanUtils spring提供的工具类进行类的copy
+            BeanUtils.copyProperties(comment,commentResultDTO);
+            commentResultDTO.setUser(userbyId);
+            commentResultDTOS.add(commentResultDTO);
+        }
+        commentPageDTO.setCommentResultDTOS(commentResultDTOS);
+        commentPageDTO.setTitlePage(commentPage);
+        commentPageDTO.setPagination(page,size);
+
+        return commentPageDTO;
+    }
+
+    //根据标签查找类似标签问题
+    public PageDTO selectLikeTag(String replace,Integer page,Integer size) {
+        //获取列表总数
+        Integer titlecount = questionMapper.samequestioncount(replace);
+        //计算分页数
+        Integer titlepage;
+        if (titlecount % size == 0){
+            titlepage = titlecount / size;
+        }else {
+            titlepage = (titlecount / size) + 1;
+        }
+        //容错处理
+        if (page < 1){
+            page = 1;
+        }
+        if (page > titlepage){
+            page = titlepage;
+        }
+
+        //通过questionmapper将数据查询出来
+        Integer offset = size * (page - 1);
+        List<Question> list = questionMapper.selectLikeTag(replace,offset,size);
+        List<QuestionDTO> questionDTOS = new ArrayList<>();
+        PageDTO pageDTO = new PageDTO();
+        //遍历list
+        for (Question question : list) {
+            //通过question.creatuid获得user对象
+            User userbyId = userMapper.findById(question.getCreatorId());
+            //将question对象拷贝进questiondto中
+            QuestionDTO questionDTO = new QuestionDTO();
+            //BeanUtils spring提供的工具类进行类的copy
+            BeanUtils.copyProperties(question,questionDTO);
+            questionDTO.setUser(userbyId);
+            questionDTOS.add(questionDTO);
+        }
+        pageDTO.setQuestionDTO(questionDTOS);
+        pageDTO.setTitlePage(titlepage);
+        pageDTO.setPagination(page,size);
+
+        return pageDTO;
+    }
+
+
 }

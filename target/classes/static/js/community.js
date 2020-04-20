@@ -1,6 +1,9 @@
 function post() {
     var questionId = $("#question_id").val();
     var comment = $("#comment_count").val();
+    if (!comment){
+        return("不能回复空内容");
+    }
     $.ajax({
         type:"POST",
         contentType:"application/json",
@@ -12,14 +15,17 @@ function post() {
         }),
         success:function(response){
             if (response.code == 200){
-                $("comment_section").hide();
+                window.location.reload();
             }else {
-                alert(response.message);
+                if (response.code == 2003){
+                    var b = confirm(response.message);
+                    if (b){
+                        window.open("/login");
+                        /*window.localStorage.setItem("closable",true);*/
+                    }
+                }
             }
-            console.log(response);
         },
         dataType:"json"
     });
-    console.log(questionId);
-    console.log(comment);
 }
