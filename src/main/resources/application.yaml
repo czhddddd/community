@@ -24,4 +24,8 @@ gitee.redirect.uri: http://localhost:8887/callbackgitee
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
-
+logging:
+  file:
+    max-history: 30 #记录日志的天数
+    max-size: 200MB
+  level: info
