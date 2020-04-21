@@ -52,8 +52,15 @@ public class MyQuestionController {
                                   @RequestParam(value = "size",defaultValue = "5") Integer size){
 
         PageDTO questions = questionService.selectLikeTag(tag,page,size);
+
+        int type = 0;
+        if (questions.equals(null)){
+            type = 1;
+        }
+
         model.addAttribute("tag",tag);
         model.addAttribute("samequestion",questions);
+        model.addAttribute("type",type);
 
         return "sametagquestion";
     }

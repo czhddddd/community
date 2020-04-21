@@ -9,6 +9,19 @@
     <script  src="/js/bootstrap.min.js" type="application/javascript" ></script>
     <link rel="stylesheet" href="/css/community.css">
     <script src="/js/community.js" type="application/javascript"></script>
+    <link rel="stylesheet" href="/editormd/css/editormd.preview.css" />
+    <script src="/editormd/editormd.js"></script>
+    <script src="/editormd/lib/marked.min.js"></script>
+    <script src="/editormd/lib/prettify.min.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            var testView = editormd.markdownToHTML("question-view", {
+                // markdown : "[TOC]\n### Hello world!\n## Heading 2", // Also, you can dynamic set Markdown text
+                // htmlDecode : true,  // Enable / disable HTML tag encode.
+                // htmlDecode : "style,script,iframe",  // Note: If enabled, you should filter some dangerous HTML tags for website security.
+            });
+        });
+    </script>
 </head>
 <body>
 <div th:insert="~{navigation :: nav}"></div>

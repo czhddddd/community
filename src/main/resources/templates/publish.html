@@ -9,7 +9,23 @@
     <script  src="/js/bootstrap.min.js" type="application/javascript" ></script>
     <link rel="stylesheet" href="/css/community.css">
     <script src="/js/community.js"></script>
-
+    <link rel="stylesheet" href="/editormd/css/editormd.min.css" />
+    <script src="/editormd/editormd.min.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            var editor = editormd("question-editor", {
+                width  : "100%",
+                height : "350px",
+                path   : "/editormd/lib/",
+                delay  :  0,
+                watch  : false,
+                placeholder : "请输入问题的描述",
+                imageUpload    : true,
+                imageFormats   : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+                imageUploadURL : '/file/upload',
+            });
+        });
+    </script>
 </head>
 <body style="background-color: #9d9d9d">
 
@@ -31,25 +47,11 @@
                     <label for="title">问题标题</label>
                     <input type="text" class="form-control" id="title" name="title" th:value="${title}" placeholder="问题标题..." autocomplete="off">
                 </div>
+                <label for="description">问题描述</label>
                 <div id="question-editor">
-                    <label for="description">问题描述</label>
                     <textarea style="display:none;" class="form-control" rows="20" id="description" name="description" th:text="${description}" ></textarea>
                 </div>
-                <!--<script type="text/javascript">
-                    $(function() {
-                        var editor = editormd("question-editor", {
-                            width  : "100%",
-                            height : "350px",
-                            path   : "/js/lib/",
-                            delay  :  0,
-                            watch  : false,
-                            placeholder : "请输入问题的描述",
-                            imageUpload    : true,
-                            imageFormats   : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
-                            imageUploadURL : "/file/upload",
-                        });
-                    });
-                </script>-->
+
 
                 <br>
                 <div class="form-group">
@@ -66,7 +68,7 @@
                         <div class="tab-content" >
                             <div role="tabpanel" th:id="${selectCategory.categoryName}" th:each="selectCategory : ${selectTags}" style="margin-top: 6px" th:class="${selectCategoryStat.first ? 'active tab-pane':' tab-pane'}">
                                 <a class="label label-info question-tag" th:each="selectTag : ${selectCategory.tags}" style="white-space: normal">
-                                    <span class="glyphicon glyphicon-tags " th:id="chuancan" onclick="selectTag(this)" th:data-tag="${selectTag}" th:text="${' '+selectTag}"></span>
+                                    <span class="glyphicon glyphicon-tags" th:id="chuancan" onclick="selectTag(this)" th:data-tag="${selectTag}" th:text="${' '+selectTag}"></span>
                                 </a>
                             </div>
                         </div>

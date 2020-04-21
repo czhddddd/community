@@ -9,6 +9,10 @@ spring:
     username: root
     password: root
     driver-class-name: org.h2.Driver
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
 
 github.client.id: Iv1.a04352b825051355
 github.client.secret: dff03ff9c237119c4acc4815547dcf6a8d6d4deb
@@ -20,3 +24,4 @@ gitee.redirect.uri: http://localhost:8887/callbackgitee
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
+

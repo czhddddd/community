@@ -38,7 +38,7 @@
             </div>
 
             <!-- 分页下标-->
-            <nav aria-label="Page navigation">
+            <nav aria-label="Page navigation" th:if="${type == 0}">
                 <ul class="pagination">
                     <li th:if="${samequestion.showFirstPage}">
                         <a th:href="@{'/sametagquestion/'+${tag}(page=${1})}" aria-label="Previous">
@@ -64,6 +64,9 @@
                         </a>
                     </li>
                 </ul>
+            </nav>
+            <nav th:if="${type == 1}">
+                <h6>没有类似内容，要不换个看看？</h6>
             </nav>
         </div>
 

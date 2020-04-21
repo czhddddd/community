@@ -20,8 +20,6 @@ import java.util.*;
 
 @Controller
 public class IndexController {
-    @Autowired
-    private UserMapper userMapper;
 
     @Autowired
     private QuestionService questionService;
@@ -30,24 +28,8 @@ public class IndexController {
     @GetMapping("/")
     public String index(HttpServletRequest request, Model model,
                         @RequestParam(value = "page",defaultValue = "1") Integer page,//前台当前页数
-                        @RequestParam(value = "size",defaultValue = "5") Integer size){//显示条数
-        /*//在request中获取cookies
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null){
-            for (Cookie cookie : cookies) {//在cookies Map集合中遍历
-                if (cookie.getName().equals("token")){//找键名为"token"的值
-                    //cookies是一个map集合，token的键名为"token"，值为我们所需要的token值
-                    String token = cookie.getValue();
-                    User user = userMapper.findByToken(token);
-                    //如果返回值不为null
-                    if (user != null){
-                        //在spring ioc中拿到HttpServletRequest，将获取到的user对象放入session中
-                        request.getSession().setAttribute("user",user);
-                    }
-                    break;
-                }
-            }
-        }*/
+                        @RequestParam(value = "size",defaultValue = "5") Integer size,
+                        @RequestParam(value = "search",required = false) String search){//显示条数
 
         //希望在index页面展示出问题列表，在上面完成登录验证之后，可以进行一个总查询将数据返回到index页面
         //进行分页操作，此时前台传输page当前页和显示条数size
