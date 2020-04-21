@@ -1,12 +1,15 @@
 package com.czh.service;
 
-import com.czh.dto.CommentDto;
 import com.czh.enums.CommentType;
+import com.czh.enums.NotificationEnum;
+import com.czh.enums.NotificationStatusEunm;
 import com.czh.exception.CustomizeErrorCode;
 import com.czh.exception.CustomizeException;
 import com.czh.mapper.CommentMapper;
+import com.czh.mapper.NotificationMapper;
 import com.czh.mapper.QuestionMapper;
 import com.czh.modle.Comment;
+import com.czh.modle.Notification;
 import com.czh.modle.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +27,8 @@ public class CommentService {
     private CommentMapper commentMapper;
     @Autowired
     private QuestionMapper questionMapper;
+    @Autowired
+    private NotificationMapper notificationMapper;
 
     @Transactional
     public void insert(Comment comment) {
@@ -41,6 +46,9 @@ public class CommentService {
                 throw  new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FIND);
             }
             commentMapper.insert(comment);
+            //创建
+            createNotification(comment, byParentId.getParentId(), NotificationEnum.REPLY_COMMENT.getType());
+
         }else {
             //回复问题
             Question byId = questionMapper.findById(comment.getParentId());
@@ -50,6 +58,22 @@ public class CommentService {
             commentMapper.insert(comment);
             questionMapper.updateByIdIncComment(comment.getParentId());
 
+            //创建通知
+            createNotification(comment,byId.getCreatorId(), NotificationEnum.REPLY_QUESTION.getType());
+
+
         }
+    }
+
+    private void createNotification(Comment comment, long receiver, int type) {
+        Notification notification = new Notification();
+        notification.setNotification(comment.getCommentator());
+        notification.setReceiver(receiver);
+        notification.setCommentId(comment.getId());
+        notification.setGmtCreate(System.currentTimeMillis());
+        notification.setType(type);
+        notification.setStatus(NotificationStatusEunm.UNREAD.getStatus());
+        notification.setQuestionId(comment.getParentId());
+        notificationMapper.insert(notification);
     }
 }

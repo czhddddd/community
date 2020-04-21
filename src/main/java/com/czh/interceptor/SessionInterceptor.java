@@ -1,7 +1,10 @@
 package com.czh.interceptor;
 
+import com.czh.mapper.NotificationMapper;
 import com.czh.mapper.UserMapper;
 import com.czh.modle.User;
+import lombok.NoArgsConstructor;
+import org.apache.ibatis.annotations.Insert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -23,6 +26,9 @@ public class SessionInterceptor implements HandlerInterceptor {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private NotificationMapper notificationMapper;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         //在request中获取cookies
@@ -33,10 +39,13 @@ public class SessionInterceptor implements HandlerInterceptor {
                     //cookies是一个map集合，token的键名为"token"，值为我们所需要的token值
                     String token = cookie.getValue();
                     User user = userMapper.findByToken(token);
+                    //是否有未读消息
+                    Integer unreadCount = notificationMapper.countByreceiver(user.getId());
                     //如果返回值不为null
                     if (user != null){
                         //在spring ioc中拿到HttpServletRequest，将获取到的user对象放入session中
                         request.getSession().setAttribute("user",user);
+                        request.getSession().setAttribute("unReadCount",unreadCount);
                     }
                     break;
                 }

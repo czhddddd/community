@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <title>我的问题</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <script src="/js/jquery.min.js"></script>
+    <script  src="/js/bootstrap.min.js" type="application/javascript" ></script>
+    <link rel="stylesheet" href="/css/community.css">
+
+</head>
+<body>
+
+<div th:insert="~{navigation :: nav}"></div>
+<div class="container-fluid">
+    <div class="row main panel panel-default">
+        <div class="col-lg-9 publish text-border mycontent-left" style="background-color: white;border-right: #999999">
+            <h2 class="top"><span th:text="${sectionName}"></span></h2>
+            <hr style="filter: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color="#6f5499" size="3" />
+
+            <!--列表-->
+            <div class="media" th:each="notification : ${notificationPageDTO.notificationDTOS}">
+                    <h5>
+                        <span th:text="${notification.name}"></span>
+                        <span th:text="${notification.type == '1' }? '您评论的' : '回复了您的问题'"></span>
+                        <a th:href="'/myquestion/'+${notification.questionId}"><span th:text="${notification.questionTitle}"></span></a>
+                    </h5>
+                    <hr style="filter: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color="#6f5499" size="3" />
+            </div>
+
+            <!--分页-->
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <li th:if="${notificationPageDTO.showFirstPage}">
+                        <a th:href="@{'/profile/'+${section}(page=${1})}" aria-label="Previous">
+                            <span aria-hidden="true">&lt&lt</span>
+                        </a>
+                    </li>
+                    <li th:if="${notificationPageDTO.showPrevious}">
+                        <a th:href="@{'/profile/'+${section}(page=${notificationPageDTO.page - 1})}" aria-label="Previous">
+                            <span aria-hidden="true">&lt</span>
+                        </a>
+                    </li>
+                    <li th:each="page:${notificationPageDTO.pages}" th:class="${notificationPageDTO.getPage() == page}? 'active' : ''">
+                        <a th:href="@{'/profile/'+${section}(page=${page})}" th:text="${page}"></a>
+                    </li>
+                    <li th:if="${notificationPageDTO.showNext}">
+                        <a th:href="@{'/profile/'+${section}(page=${notificationPageDTO.page + 1})}" aria-label="Previous">
+                            <span aria-hidden="true">&gt</span>
+                        </a>
+                    </li>
+                    <li th:if="${notificationPageDTO.showEndPage}">
+                        <a th:href="@{'/profile/'+${section}(page=${notificationPageDTO.titlePage})}" aria-label="Previous">
+                            <span aria-hidden="true">&gt&gt</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="col-lg-3" style="background-color: white">
+            <div class="list-group">
+
+                <a href="/profile/question"  th:class="${section == 'question'}? 'list-group-item active' : 'list-group-item'">我的提问</a>
+                <a href="/profile/replies"  th:class="${section == 'replies'}? 'list-group-item active' : 'list-group-item'">消息</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

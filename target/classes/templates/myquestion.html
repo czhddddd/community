@@ -10,16 +10,6 @@
     <link rel="stylesheet" href="/css/community.css">
     <script src="/js/community.js" type="application/javascript"></script>
 </head>
-<!--<script type="application/javascript">
-    window.onload = function(){
-        var item = window.localStorage.getItem("closable");
-        debugger;
-        if (item == "true"){
-            window.close();
-            window.localStorage.removeItem("closable");
-        }
-    }
-</script>-->
 <body>
 <div th:insert="~{navigation :: nav}"></div>
 <div class="container-fluid">
@@ -29,7 +19,9 @@
             <span style="color: #999999;font-size: 12px;font-weight: normal;">作者<span th:text="${myquestion.getUser().getName()}"></span> |发布于 <span th:text="${#dates.format(myquestion.getGmtCreate(),'yyyy-MM-dd HH:mm')}"></span> | 阅读数 <span th:text="${myquestion.viewCount}"></span> </span>
             <hr style="filter: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color="#6f5499" size="3" />
 
-            <div><span th:text="${myquestion.description}"></span></div>
+            <div id="question-view">
+                <textarea style="display:none;" th:text="${myquestion.description}"></textarea>
+            </div>
 
             <hr style="filter: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color="#6f5499" size="3" />
 
