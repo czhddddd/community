@@ -25,7 +25,12 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
 logging:
-  file:
+   file:
     max-history: 30 #记录日志的天数
     max-size: 200MB
-  level: info
+   level:
+     root: info
+
+
+
+     #208f5107e04b0bd61d57431e06d7e3c9
